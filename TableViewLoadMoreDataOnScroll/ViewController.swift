@@ -16,7 +16,7 @@ class ViewController: UIViewController {
     //Items to be fetched everytime (items limit)
     var fetchLimit = 20
     
-    //Where to fetch items from server or database
+    //Starting offset to fetch new items
     var offset = 0
     
     //Track if database has no more items to display
