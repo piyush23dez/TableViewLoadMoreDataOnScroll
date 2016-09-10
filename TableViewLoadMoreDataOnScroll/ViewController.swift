@@ -35,6 +35,24 @@ class ViewController: UIViewController {
     }
 }
 
+extension ViewController: UITableViewDataSource {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return dataSourceArr.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        /*
+         if indexPath.row == dataSourceArr.count-1 {
+            loadMore()
+         }
+        */
+        return UITableViewCell()
+    }
+}
+
+
 extension ViewController: UITableViewDelegate {
     
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
