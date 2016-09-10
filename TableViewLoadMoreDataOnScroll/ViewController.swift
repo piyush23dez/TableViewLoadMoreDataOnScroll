@@ -14,7 +14,7 @@ class ViewController: UIViewController {
     var dataSourceArr = [AnyObject]()
     
     //Items to be fetched everytime (items limit)
-    var itemsPerRequest = 20
+    var fetchLimit = 20
     
     //Where to fetch items from server or database
     var offset = 0
@@ -71,12 +71,15 @@ extension ViewController: UITableViewDelegate {
         guard !reachedEndOfItems else {
             return
         }
+    
+        //Start holds updated offset after user scrolls to the end of tableview
+        let start = self.offset
+        
+        //End holds (start + new set of data to be fetched)
+        let end = start + self.fetchLimit
         
         //System provided global dipatch background concurrent queue
         let backgroundQueue = DispatchQueue.global(qos: .background)
-       
-        let start = self.offset
-        let end = start + self.itemsPerRequest
         
         //Run fetching new data operatoin on background queue
         backgroundQueue.async {
@@ -92,10 +95,12 @@ extension ViewController: UITableViewDelegate {
                 self.tableView?.reloadData()
                 
                 //If newly fetched data array has less items(0..<fetchLimit) that means we are at end of the list
-                if thisRequestItems.count < self.itemsPerRequest {
+                if thisRequestItems.count < self.fetchLimit {
                     self.reachedEndOfItems = true
                 }
-                self.offset += self.itemsPerRequest
+                
+                //Reset the offset for next data array
+                self.offset += self.fetchLimit
             }
         }
     }
