@@ -77,28 +77,28 @@ extension ViewController: UITableViewDelegate {
         //End holds (start + new set of data to be fetched)
         let end = start + self.fetchLimit
         
-        //System provided global dipatch background concurrent queue
+        //System provided global (dipatch) background concurrent queue
         let backgroundQueue = DispatchQueue.global(qos: .background)
         
-        //Run fetching new data operatoin on background queue
+        //Run fetching new data operation on background queue
         backgroundQueue.async {
             
             //Fetch new data from server or database using start(offset) and end values (i.e start = 100, end = 100+50)
-            let thisRequestItems = DataManager.getData(start: start, end: end)
+            let newItems = DataManager.getData(start: start, end: end)
             
-            //After data is fetched update ui
+            //After data is fetched update ui on main thread
             DispatchQueue.main.async {
                 
-                //Append the new items to the data source for the table view
-                self.dataSourceArr.append(contentsOf: thisRequestItems)
+                //Append new items to the data source for the tableView
+                self.dataSourceArr.append(contentsOf: newItems)
                 self.tableView?.reloadData()
                 
-                //If newly fetched data array has less items(0..<fetchLimit) that means we are at end of the list
-                if thisRequestItems.count < self.fetchLimit {
+                //If newly fetched data array has less items(0..<fetchLimit(20)) that means we are at end of the list
+                if newItems.count < self.fetchLimit {
                     self.reachedEndOfItems = true
                 }
                 
-                //Reset the offset for next data array
+                //Reset the offset for next data array of new items
                 self.offset += self.fetchLimit
             }
         }
