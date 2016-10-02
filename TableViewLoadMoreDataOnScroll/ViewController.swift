@@ -57,10 +57,9 @@ extension ViewController: UITableViewDelegate {
     
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         
-        let currentOffset = scrollView.contentOffset.y
-        let maxOffset = scrollView.contentSize.height - scrollView.frame.size.height
+        let maxOffset = scrollView.contentSize.height - (scrollView.frame.size.height + scrollView.contentOffset.y)
         
-        if maxOffset-currentOffset <= 10 {
+        if maxOffset <= 10 {
             loadMore()
         }
     }
