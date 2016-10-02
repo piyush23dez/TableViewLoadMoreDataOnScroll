@@ -84,7 +84,7 @@ extension ViewController: UITableViewDelegate {
         backgroundQueue.async {
             
             //Fetch new data from server or database using start(offset) and end values (i.e start = 100, end = 100+50)
-            let newItems = DataManager.getData(start: start, end: end)
+            let newItems = DataManager.getNewData(start: start, end: end)
             
             //After data is fetched update ui on main thread
             DispatchQueue.main.async {
@@ -107,14 +107,17 @@ extension ViewController: UITableViewDelegate {
 
 struct DataManager {
     
-    private static var dataArray = [AnyObject]()
+    private var dataArray = [AnyObject]()
     
-    static func getData(start: Int, end: Int) -> [AnyObject] {
+    static func getNewData(start: Int, end: Int) -> [AnyObject] {
         let newArr = Array(DataManager.dataArray[start..<end])
         guard  newArr.count > 0 else {
             return []
         }
         return newArr
+    }
+    static func saveData(newItems: [AnyObject]) {
+        dataArray = newItems
     }
 }
 
